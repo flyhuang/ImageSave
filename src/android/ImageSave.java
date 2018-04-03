@@ -55,12 +55,12 @@ public class ImageSave extends CordovaPlugin {
 
     private void initData(JSONArray iamgeJsonArr) {
         if (null == errorImageList) {
-            errorImageList = new ArrayList<>();
+            errorImageList = new ArrayList<String>();
         } else {
             errorImageList.clear();
         }
         if (null == imageList) {
-            imageList = new ArrayList<>();
+            imageList = new ArrayList<String>();
         } else {
             imageList.clear();
         }
