@@ -30,6 +30,8 @@ public class ImageSave extends CordovaPlugin {
 
     private ArrayList<String> imageList = null;
     private ArrayList<String> errorImageList = null;
+    private ArrayList<String> imageNameList = null;
+
 
     private CallbackContext callbackContext = null;
 
@@ -64,6 +66,13 @@ public class ImageSave extends CordovaPlugin {
         } else {
             imageList.clear();
         }
+
+        if (null == imageNameList) {
+            imageNameList = new ArrayList<String>();
+        } else {
+            imageNameList.clear();
+        }
+
         successCount = 0;
         errorCount = 0;
         if (null == albumName) {
@@ -84,6 +93,7 @@ public class ImageSave extends CordovaPlugin {
                     if (!checkFileExists(fileFullPath)) {
                         // check local file exist. if not, download it
                         imageList.add(itemJson.getString("imageUrl"));
+                        imageNameList.add(itemJson.getString("fileFullName"));
                     } else {
                         // exist, check album dir exist the file
                         copyFile(fileFullPath, imageFullPath);
@@ -105,9 +115,11 @@ public class ImageSave extends CordovaPlugin {
             public void run() {
                 for (int i = 0; i < imageList.size(); i++) {
                     String imageUrl = imageList.get(i);
-                    String imageName = getImageName(imageUrl);
-                    String imageFormat = getImageFormatName(imageUrl);
-                    saveImage(imageUrl, imageName, imageFormat);
+                    // String imageName = getImageName(imageUrl);
+                    String imageName = imageNameList.get(i);
+                    // String imageFormat = getImageFormatName(imageUrl);
+                    //saveImage(imageUrl, imageName, imageFormat);
+                    saveImage(imageUrl, imageName);
                 }
                 handleSaveStatus();
             }
@@ -168,11 +180,10 @@ public class ImageSave extends CordovaPlugin {
      *
      * @param url      "http://www.xxx.com/file/xxx.png/xxx_yyy"
      * @param filename "xxx_yyy"
-     * @param format   ".png"
      */
-    private void saveImage(String url, String filename, String format) {
+    private void saveImage(String url, String filename) {
         try {
-            filename += format;
+            //filename += format;
             String filePath = url;
             Log.d(TAG, ALBUM_PATH);
             File dirFile = new File(ALBUM_PATH);
